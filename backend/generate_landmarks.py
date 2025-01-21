@@ -9,14 +9,14 @@ mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confidence=0.3)
 
 # Paths
-DATASET_DIR = "DATASET/asl_dataset/"  # Update this path
+DATASET_DIR = "DATASET2/asl_alphabet_train/"  # Update this path
 CSV_FILE = "landmarks.csv"
 
 # Create or open CSV file
 with open(CSV_FILE, mode='w', newline='') as file:
     writer = csv.writer(file)
     # Write the header
-    header = ["label"] + [f"x{i}" for i in range(21)] + [f"y{i}" for i in range(21)] + [f"z{i}" for i in range(21)]
+    header = [f"x{i}" for i in range(21)] + [f"y{i}" for i in range(21)] + [f"z{i}" for i in range(21)]+["label"]
     writer.writerow(header)
 
     # Process each folder (label)
@@ -43,7 +43,7 @@ with open(CSV_FILE, mode='w', newline='') as file:
                 image_rgb = cv2.resize(image_rgb, (256, 256))
                     # Process the image with Mediapipe
                 results = hands.process(image_rgb)
-                
+
                 if results.multi_hand_landmarks:
                     for hand_landmarks in results.multi_hand_landmarks:
                         # Extract landmarks
@@ -51,7 +51,7 @@ with open(CSV_FILE, mode='w', newline='') as file:
                         for lm in hand_landmarks.landmark:
                             landmarks.extend([lm.x, lm.y, lm.z])
                         # Write landmarks to CSV
-                        writer.writerow([label] + landmarks)
+                        writer.writerow(landmarks +[label])
                         print(f"Hand detected and landmarks saved for {img_path}")
                 else:
                     print(f"No hands detected yet in {img_path}. Retrying...")

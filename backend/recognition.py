@@ -4,7 +4,7 @@ import numpy as np
 from tensorflow.keras.models import load_model
 
 # Load the trained model
-MODEL_PATH = "asl_model.h5"
+MODEL_PATH = "asl_landmark_model.keras"
 model = load_model(MODEL_PATH)
 
 # Initialize Mediapipe Hands
@@ -15,7 +15,7 @@ hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_c
 cap = cv2.VideoCapture(0)
 
 # Load label encoder
-LABELS = [chr(i) for i in range(97, 123)] + [str(i) for i in range(10)]  # a-z, 0-9
+LABELS = [chr(i) for i in range(97, 123)] # a-z, DEL, SPACE
 
 while True:
     ret, frame = cap.read()
